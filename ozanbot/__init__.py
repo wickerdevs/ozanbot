@@ -10,7 +10,7 @@ from telegram.ext import messagequeue as mq
 
 # Enable logging
 # TODO REMOVE WHEN FINISHED DEBUGGING
-debug = False
+debug = True
 if debug:
     logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 else:

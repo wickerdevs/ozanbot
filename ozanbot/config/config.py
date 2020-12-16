@@ -10,7 +10,7 @@ def get(key="", parent="", default="", value=""):
     if os.environ.get('PORT') in (None, ""):
         # CODE RUNNING LOCALLY
         variables = {}
-        with open('//config/secrets.json') as variables_file: # TODO
+        with open('ozanbot/config/secrets.json') as variables_file: # TODO
             variables = json.load(variables_file)
         if value != "":
             if value in variables.values():
@@ -41,14 +41,14 @@ def set(key, value):
     :value: the value of the variable (type str)
     """
     if os.environ.get('PORT') in (None, ""):
-        with open('//config/config.json') as variables_file: # TODO
+        with open('ozanbot/config/config.json') as variables_file: # TODO
             variables = json.load(variables_file)
 
         if key in variables:
             del variables[key]
         variables[key] = value
 
-        with open('//config/config.json', 'w') as output_file: # TODO
+        with open('ozanbot/config/config.json', 'w') as output_file: # TODO
             json.dump(variables, output_file)
     else:
         os.environ[key] = value

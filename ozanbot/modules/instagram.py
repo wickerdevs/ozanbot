@@ -7,7 +7,7 @@ instalogger = logging.getLogger('instaclient')
 
 def insta_error_callback(driver):
     driver.save_screenshot('error.png')
-    from .. import telegram_bot as bot, config # TODO
+    from ozanbot import telegram_bot as bot, config # TODO
     users_str = config.get('DEVS')
     if isinstance(users_str, str):
         users_str = users_str.replace('[', '')
