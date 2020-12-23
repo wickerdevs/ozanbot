@@ -1,15 +1,15 @@
 # INSTAGRAM MODULE
 logging_in_text = 'Initiating driver and logging in...'
 # Follow Module
-waiting_scrape_text = 'Scraping followers... Waited {} seconds so far'
+waiting_scrape_text = 'Scraping followers...'
 restricted_account_text = 'Your account has been either restricted or blocked due to sospicious activity. Please open Instagram and log in and use it normally for at least 24 hours before trying again.'
 starting_follows_text = '{}\'s followers have been scraped. Starting to follow {} users...'
-followed_user_text = 'Followed {} user(s) out of {}...'
+followed_user_text = 'Interacted with {} user(s) out of {}...'
 invalid_credentials_text = 'Your instagram credentials are incorrect... Please log int again with /login'
 verification_code_necessary = 'Your instagram account has 2FA turned on... In order for the bot to work, please turn it off.'
 private_account_error_text = 'The account {} is private - hence it\'s impossible to get it\'s followers. Please try again with another account using /follow'
-operation_error_text = 'There was an error when executing your request... The developer has been informed.'
-follow_successful_text = 'Operation successful! {} of {}\'s followers have been followed'
+operation_error_text = 'There was an error when executing your request... The developer has been informed. The bot has interacted with {} users.'
+follow_successful_text = 'Operation successful! The bot has interacteed with {} of {}\'s!'
 
 
 # START COMMAND

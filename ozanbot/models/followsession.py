@@ -22,16 +22,19 @@ class FollowSession(InstaSession):
         return self.count
 
     def get_scraped(self):
-        return self.scraped.copy()
+        if not self.interaction.scraped:
+            return list()
+        return self.interaction.scraped.copy()
 
     def get_followed(self):
-        return self.followed.copy()
+        if not self.interaction.followed:
+            return list()
+        return self.interaction.followed.copy()
 
     def get_failed(self):
-        return self.failed.copy()
-
-    def get_unfollowed(self):
-        return self.unfollowed.copy()
+        if not self.interaction.failed:
+            return list()
+        return self.interaction.failed.copy()
 
     @persistence_decorator
     def set_interaction(self, interaction):
