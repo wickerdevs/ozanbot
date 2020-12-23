@@ -1,6 +1,6 @@
 import os, logging
 import telegram
-from template import updater, telelogger
+from ozanbot import updater, telelogger
 
 
 if __name__ == '__main__':

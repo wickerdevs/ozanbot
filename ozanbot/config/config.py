@@ -1,16 +1,67 @@
-import json
-import os
+import json, os
+from ozanbot.models.setting import Setting
+from ozanbot import CONFIG_DIR
+from typing import Optional, Set, TYPE_CHECKING
+if TYPE_CHECKING:
+    from ozanbot.models.settings import Settings
+
+
+
+############################### MESSAGE #################################
+def set_message(user_id, message_id):
+    messages = get('MESSAGES')
+    if not messages:
+        set('MESSAGES', {str(user_id): message_id})
+    else:
+        messages[str(user_id)] = message_id
+        set('MESSAGES', messages)
+
+
+def get_message(user_id):
+    messages = get('MESSAGES')
+    if not messages:
+        return None
+    else:
+        return messages.get(str(user_id))
+
+
+def set_settings(data:'Settings'):
+    """
+    set_settings Save settings to config.json
+
+    Args:
+        settings (Settings): Settings object
+    """
+    set(f'SETTINGS:{data.get("user_id")}', data)
+
+
+
+def get_settings(user_id:int) -> Optional['Settings']:
+    """
+    Return `Setting` object corresponding to the user id.
+
+    Args:
+        user_id (int): Telegram user ID to check for
+
+    Returns:
+        Setting or None: Setting matching `user_id` attribute
+    """
+    from ozanbot.models.settings import Settings 
+    data:Optional['Settings'] = get(f'SETTINGS:{user_id}')
+    if data:
+        return Settings.de_json(data)
+    return None
 
 
 def get(key="", parent="", default="", value=""):
     """
-    Retrieve configuration variables from the secrets.json file.
-    :variable: String of the name of the variable you are retrieving (see secrets.json)
+    Retrieve configuration variables from the config.json file.
+    :variable: String of the name of the variable you are retrieving (see config.json)
     """
     if os.environ.get('PORT') in (None, ""):
         # CODE RUNNING LOCALLY
         variables = {}
-        with open('ozanbot/config/secrets.json') as variables_file: # TODO
+        with open(CONFIG_DIR) as variables_file: # TODO
             variables = json.load(variables_file)
         if value != "":
             if value in variables.values():
@@ -41,14 +92,14 @@ def set(key, value):
     :value: the value of the variable (type str)
     """
     if os.environ.get('PORT') in (None, ""):
-        with open('ozanbot/config/config.json') as variables_file: # TODO
+        with open(CONFIG_DIR) as variables_file: # TODO
             variables = json.load(variables_file)
 
         if key in variables:
             del variables[key]
         variables[key] = value
 
-        with open('ozanbot/config/config.json', 'w') as output_file: # TODO
+        with open(CONFIG_DIR, 'w') as output_file: # TODO
             json.dump(variables, output_file)
     else:
         os.environ[key] = value

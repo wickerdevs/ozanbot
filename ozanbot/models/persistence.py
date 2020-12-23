@@ -1,4 +1,5 @@
 import json, jsonpickle
+from ozanbot import PERSISTENCE_DIR
 from . import *
 import os
 
@@ -27,6 +28,10 @@ class Persistence(object):
         self.user_id = user_id
         self.message_id = message_id
 
+    
+    def __getitem__(self, item: str):
+        return self.__dict__[item]
+
 
     @persistence_decorator
     def set_message(self, message_id):
@@ -41,20 +46,41 @@ class Persistence(object):
     def get_message_id(self):
         return self.message_id
 
+    
+    def to_dict(self) -> str:
+        data = dict()
+
+        for key in iter(self.__dict__):
+            value = self.__dict__[key]
+            if value is not None:
+                if hasattr(value, 'to_dict'):
+                    data[key] = value.to_dict()
+                else:
+                    data[key] = value
+        return data
+
+    @classmethod
+    def de_json(cls, data: dict):
+
+        if not data:
+            return None
+
+        obj = cls(**data)  # type: ignore[call-arg]
+        return obj
 
     def discard(self):
         # CODE RUNNING LOCALLY
         try:
             os.remove(
-            "ffinstabot/bot/persistence/{}{}.json".format(self.method, self.user_id))
+            "{}{}{}.json".format(PERSISTENCE_DIR, self.method, self.user_id))
         except FileNotFoundError:
             return self
 
     def serialize(self):
         # CODE RUNNING LOCALLY
-        if not os.path.isdir('ffinstabot/bot/persistence/'):
-            os.mkdir('ffinstabot/bot/persistence/')
-        with open("ffinstabot/bot/persistence/{}{}.json".format(self.method, self.user_id), "w") as write_file:
+        if not os.path.isdir(PERSISTENCE_DIR):
+            os.mkdir(PERSISTENCE_DIR)
+        with open("{}{}{}.json".format(PERSISTENCE_DIR, self.method, self.user_id), "w") as write_file:
             encoded = jsonpickle.encode(self)
             json.dump(encoded, write_file, indent=4)
         return self
@@ -62,7 +88,7 @@ class Persistence(object):
     def deserialize(method, update):
         # CODE RUNNING LOCALLY
         try:
-            with open("ffinstabot/bot/persistence/{}{}.json".format(method, update.effective_chat.id)) as file:
+            with open("{}{}{}.json".format(PERSISTENCE_DIR, method, update.effective_chat.id)) as file:
                 json_string = json.load(file)
                 obj = jsonpickle.decode(json_string)
                 return obj

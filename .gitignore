@@ -1,5 +1,5 @@
 # Secrets
-secrets.json
+config.json
 persistence
 client_secret.json
 *.json

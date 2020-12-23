@@ -1,11 +1,15 @@
 from ...config import config
 from ...bot import *
 from ...texts import *
+from ...models.callbacks import *
 from ...models.persistence import Persistence
 from ...models.instasession import InstaSession
+from ...models.followsession import FollowSession
+from ...models.settings import Settings
+from ...models.setting import Setting
 from ...models.callbacks import *
 from ...models.markup import CreateMarkup, MarkupDivider
-from ...modules import instagram, sheet
+from ...modules import instagram
 from telegram import InputMediaPhoto, InputFile, Update
 from telegram.ext import CallbackContext
 
@@ -32,11 +36,11 @@ def send_message(update:Update, context:CallbackContext, message:str, markup=Non
             message = update.callback_query.edit_message_text(text=message, reply_markup=markup)
         else:
             message = update.callback_query.edit_message_text(text=message)
-        sheet.set_message(update.effective_user.id, message.message_id)
+        config.set_message(update.effective_user.id, message.message_id)
         return message
 
-    elif sheet.get_message(update.effective_chat.id):
-        message_id = sheet.get_message(update.effective_chat.id)
+    elif config.get_message(update.effective_chat.id):
+        message_id = config.get_message(update.effective_chat.id)
         try:
             context.bot.delete_message(chat_id=update.effective_chat.id, message_id=message_id)
             telelogger.debug(f'Deleted bot message. id: {message_id}')
@@ -53,12 +57,12 @@ def send_message(update:Update, context:CallbackContext, message:str, markup=Non
     else:
         message = context.bot.send_message(chat_id=update.effective_chat.id, text=message, parse_mode=ParseMode.HTML)
 
-    sheet.set_message(update.effective_user.id, message.message_id)
+    config.set_message(update.effective_user.id, message.message_id)
     return message
 
 
 def check_auth(update, context):
-    users_str = config.get_var('USERS')
+    users_str = config.get('USERS')
     if isinstance(users_str, str):
         users_str = users_str.replace('[', '')
         users_str = users_str.replace(']', '')

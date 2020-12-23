@@ -1,6 +1,10 @@
+PERSISTENCE_DIR = 'ozanbot/bot/persistence/'
+CONFIG_DIR = 'ozanbot/config/config.json'
+CONFIG_FOLDER = 'ozanbot/config/'
+
 import os, logging
 import telegram
-from instaclient import InstaClient
+from instaclient.client.instaclient import InstaClient
 from telegram.ext.updater import Updater
 from telegram.ext.defaults import Defaults
 from telegram.utils.request import Request
@@ -23,8 +27,7 @@ instalogger = logging.getLogger('instaclient')
 instalogger.setLevel(logging.DEBUG)
 
 telelogger = logging.getLogger("telegram.bot")
-telelogger.setLevel(logging.DEBUG)
-
+telelogger.setLevel(logging.INFO)
 
 def instaclient_error_callback(driver):
     from . import telegram_bot as bot
@@ -41,8 +44,8 @@ if os.environ.get('PORT') not in (None, ""):
 
 # Initialize Bot
 from .config import config
-BOT_TOKEN = config.get_var('BOT_TOKEN')
-URL = config.get_var('SERVER_APP_DOMAIN')
+BOT_TOKEN = config.get('BOT_TOKEN')
+URL = config.get('SERVER_APP_DOMAIN')
 PORT = int(os.environ.get('PORT', 5000))
 from .bot import setup
 
