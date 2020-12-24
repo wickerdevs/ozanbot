@@ -12,7 +12,7 @@ from ozanbot.texts import *
 from typing import List, Optional, Tuple
 from ozanbot import CONFIG_DIR, CONFIG_FOLDER
 from instaclient.client.instaclient import InstaClient
-from instaclient.errors.common import FollowRequestSentError, InvaildPasswordError, InvalidUserError, SuspisciousLoginAttemptError, VerificationCodeNecessary
+from instaclient.errors.common import FollowRequestSentError, InvaildPasswordError, InvalidUserError, PrivateAccountError, SuspisciousLoginAttemptError, VerificationCodeNecessary
 from instaclient.instagram.post import Post
 from ..models.instasession import InstaSession
 from ozanbot import applogger
@@ -137,25 +137,28 @@ def enqueue_interaction(session:FollowSession) -> Tuple[bool, Optional[FollowSes
         # TODO: Get first 2 posts
         comments = 0
         try:
-            posts:List[Post] = client.get_user_posts(follower, 2)
-            for post in posts:
-                try:
-                    post.like()
-                    session.add_liked(post)
-                    if comments < 1:
-                        post.add_comment(setting.comment)
-                        session.add_commented(post)
-                        comments += 1
-                except Exception as error:
-                    applogger.error(f'Error in sending like/comment to <{follower}>: ', exc_info=error)
-                    pass
+            try:
+                posts:List[Post] = client.get_user_posts(follower, 2)
+                for post in posts:
+                    try:
+                        post.like()
+                        session.add_liked(post)
+                        if comments < 1:
+                            post.add_comment(setting.comment)
+                            session.add_commented(post)
+                            comments += 1
+                    except Exception as error:
+                        applogger.error(f'Error in sending like/comment to <{follower}>: ', exc_info=error)
+                        pass
+            except (PrivateAccountError, InvalidUserError):
+                pass
         except Exception as error:
             applogger.error(f'Error in interacting: ', exc_info=error)
             client.disconnect()
             update_message(session, operation_error_text.format(len(session.get_followed())))
             return (False, session)
         
-    update_message(session, follow_successful_text.format(len(session.get_followed)))
+    update_message(session, follow_successful_text.format(len(session.get_followed())))
     client.disconnect()
     return (True, session)
 
