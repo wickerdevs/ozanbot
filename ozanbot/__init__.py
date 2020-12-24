@@ -1,6 +1,6 @@
-PERSISTENCE_DIR = 'ozanbot/bot/persistence/'
-CONFIG_DIR = 'ozanbot/config/config.json'
-CONFIG_FOLDER = 'ozanbot/config/'
+PERSISTENCE_DIR = 'config/'
+CONFIG_DIR = 'config/config.json'
+CONFIG_FOLDER = 'config/'
 
 import os, logging
 import telegram
