@@ -1,4 +1,7 @@
 from logging import Filter
+
+from telegram import update
+from ozanbot import telelogger
 from ozanbot.bot.commands.login import *
 from ozanbot.bot.commands.help import *
 from ozanbot.bot.commands.logout import *
@@ -11,6 +14,7 @@ from ozanbot.models.callbacks import *
 
 
 def setup(updater):
+    telelogger.debug('Bot setup running...')
     dp:Dispatcher = updater.dispatcher
 
     instagram_handler = ConversationHandler(
@@ -67,3 +71,5 @@ def setup(updater):
     dp.add_handler(MessageHandler(Filters.command, incorrect_command))
 
     dp.add_error_handler(error)
+    telelogger.debug('Bot setup complete!')
+    return updater
