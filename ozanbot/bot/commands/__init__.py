@@ -1,15 +1,15 @@
-from ...config import config
-from ...bot import *
-from ...texts import *
-from ...models.callbacks import *
-from ...models.persistence import Persistence
-from ...models.instasession import InstaSession
-from ...models.followsession import FollowSession
-from ...models.settings import Settings
-from ...models.setting import Setting
-from ...models.callbacks import *
-from ...models.markup import CreateMarkup, MarkupDivider
-from ...modules import instagram
+from ozanbot.config import config
+from ozanbot.bot import *
+from ozanbot.texts import *
+from ozanbot.models.callbacks import *
+from ozanbot.models.persistence import Persistence
+from ozanbot.models.instasession import InstaSession
+from ozanbot.models.followsession import FollowSession
+from ozanbot.models.settings import Settings
+from ozanbot.models.setting import Setting
+from ozanbot.models.callbacks import *
+from ozanbot.models.markup import CreateMarkup, MarkupDivider
+from ozanbot.modules import instagram
 from telegram import InputMediaPhoto, InputFile, Update
 from telegram.ext import CallbackContext
 

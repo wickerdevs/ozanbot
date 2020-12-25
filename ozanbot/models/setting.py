@@ -1,8 +1,6 @@
 from datetime import timedelta
 from typing import List
 
-from instaclient.instagram import comment
-
 
 class Setting(object):
     def __init__(self, account:str=None, comment:str=None, interactions:int=None) -> None:

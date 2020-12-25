@@ -1,4 +1,4 @@
-from ...bot.commands import *
+from ozanbot.bot.commands import *
 
 
 @send_typing_action

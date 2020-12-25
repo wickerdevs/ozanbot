@@ -8,7 +8,7 @@ from instaclient.client.instaclient import InstaClient
 from telegram.ext.updater import Updater
 from telegram.ext.defaults import Defaults
 from telegram.utils.request import Request
-from .models.mq_bot import MQBot
+from ozanbot.models.mq_bot import MQBot
 from telegram import ParseMode
 from telegram.ext import messagequeue as mq
 

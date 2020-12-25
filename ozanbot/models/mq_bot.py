@@ -1,6 +1,6 @@
-from ..config import config
+from ozanbot.config import config
 import telegram.bot
-from . import *
+from ozanbot import *
 from telegram.ext import messagequeue as mq 
 
 class MQBot(telegram.bot.Bot):

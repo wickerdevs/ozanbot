@@ -1,13 +1,13 @@
 from logging import Filter
-from .commands.login import *
-from .commands.help import *
-from .commands.logout import *
-from .commands.interact import *
-from .commands.account import *
-from .commands.start import *
-from .commands.incorrect import *
-from .commands.settings import * 
-from ..models.callbacks import *
+from ozanbot.bot.commands.login import *
+from ozanbot.bot.commands.help import *
+from ozanbot.bot.commands.logout import *
+from ozanbot.bot.commands.interact import *
+from ozanbot.bot.commands.account import *
+from ozanbot.bot.commands.start import *
+from ozanbot.bot.commands.incorrect import *
+from ozanbot.bot.commands.settings import * 
+from ozanbot.models.callbacks import *
 
 
 def setup(updater):

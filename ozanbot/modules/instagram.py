@@ -14,7 +14,7 @@ from ozanbot import CONFIG_DIR, CONFIG_FOLDER
 from instaclient.client.instaclient import InstaClient
 from instaclient.errors.common import FollowRequestSentError, InvaildPasswordError, InvalidUserError, PrivateAccountError, SuspisciousLoginAttemptError, VerificationCodeNecessary
 from instaclient.instagram.post import Post
-from ..models.instasession import InstaSession
+from ozanbot.models.instasession import InstaSession
 from ozanbot import applogger
 import os, multiprocessing
 

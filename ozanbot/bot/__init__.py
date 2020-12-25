@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 from functools import wraps
 from telegram.utils.helpers import mention_html
 import sys, traceback, json, logging, os, html, pickle
-from ..config import config
+from ozanbot.config import config
 
 telelogger = logging.getLogger('telegram.bot')
 

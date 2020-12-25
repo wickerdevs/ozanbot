@@ -1,4 +1,4 @@
-from ..commands import *
+from ozanbot.bot.commands import *
 
 @send_typing_action
 def incorrect_command(update, context):

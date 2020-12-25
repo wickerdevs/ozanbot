@@ -1,6 +1,5 @@
 import json, jsonpickle
 from ozanbot import PERSISTENCE_DIR
-from . import *
 import os
 
 def persistence_decorator(func):

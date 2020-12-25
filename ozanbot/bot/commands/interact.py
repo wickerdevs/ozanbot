@@ -1,6 +1,6 @@
 from instaclient.client.instaclient import InstaClient
 from instaclient.errors.common import InvalidUserError, NotLoggedInError, PrivateAccountError
-from ...bot.commands import *
+from ozanbot.bot.commands import *
 
 @send_typing_action
 def follow_def(update, context):

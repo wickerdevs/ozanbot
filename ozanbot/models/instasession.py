@@ -1,7 +1,7 @@
-from .persistence import persistence_decorator
-from ..config import config
-from ..bot.commands import *
-from . import *
+from ozanbot.models.persistence import persistence_decorator
+from ozanbot.config import config
+from ozanbot.bot.commands import *
+from ozanbot import *
 import os
 
 class InstaSession(Persistence):
