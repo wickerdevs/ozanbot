@@ -1,4 +1,4 @@
-from ozanbot import applogger, telelogger, BOT_TOKEN
+from ozanbot import applogger, telelogger, BOT_TOKEN, telegram_bot
 from telegram.ext.updater import Updater
 from telegram.ext.defaults import Defaults
 from telegram.utils.request import Request

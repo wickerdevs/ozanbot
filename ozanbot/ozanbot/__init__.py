@@ -4,6 +4,8 @@ CONFIG_FOLDER = 'ozanbot/config/'
 
 import os, logging
 
+telegram_bot = None
+
 # Enable logging
 # TODO REMOVE WHEN FINISHED DEBUGGING
 debug = True
