@@ -61,13 +61,13 @@ def update_message(obj: FollowSession, text:str):
     obj.set_message(message_obj.message_id)
     config.set_message(obj.user_id, message_obj.message_id)
     applogger.debug(f'Sent message of id {message_obj.message_id}')
-    return   
+    return message_obj
 
 
 
 def init_client():
     if os.environ.get('PORT') in (None, ""):
-        client = InstaClient(driver_path=f'{CONFIG_FOLDER}chromedriver.exe', debug=True, error_callback=insta_error_callback, logger=instalogger, localhost_headless=True)
+        client = InstaClient(driver_path=f'{CONFIG_FOLDER}chromedriver.exe', debug=True, error_callback=insta_error_callback, logger=instalogger, localhost_headless=True) # TODO
     else:
         client = InstaClient(host_type=InstaClient.WEB_SERVER, debug=True, error_callback=insta_error_callback, logger=instalogger, localhost_headless=True)
     return client
@@ -112,7 +112,7 @@ def enqueue_interaction(session:FollowSession) -> Tuple[bool, Optional[FollowSes
     # TODO: Scrape Users
     update_message(session, waiting_scrape_text)
     try:
-        followers = client.get_followers(session.target, session.count)
+        followers = client.get_followers(session.target, session.count, deep_scrape=False)
         session.set_scraped(followers)
     except Exception as error:
         applogger.error(f'Error in scraping <{session.target}>\'s followers: ', exc_info=error)
@@ -121,6 +121,7 @@ def enqueue_interaction(session:FollowSession) -> Tuple[bool, Optional[FollowSes
         return (False, None)
 
     # FOR EACH USER
+    followed = 0
     for index, follower in enumerate(followers):
         # TODO: Follow User
         if follower == session.username:
@@ -134,25 +135,26 @@ def enqueue_interaction(session:FollowSession) -> Tuple[bool, Optional[FollowSes
         try:
             profile.follow()
             session.add_followed(profile)
+            followed += 1
         except FollowRequestSentError as error:
+            session.add_followed(profile)
+            followed += 1
             pass
         except Exception as error:
-            applogger.error(f'Error in following <{follower}>\'s followers: ', exc_info=error)
-            client.disconnect()
-            update_message(session, operation_error_text.format(len(session.get_followed())))
-            return (False, session)
+            applogger.error(f'Error in following <{session.target}>\'s follower <{follower}>: ', exc_info=error)
+            continue
 
         # TODO: Get first 2 posts
         if profile.post_count > 0:
             comments = 0
             try:
                 try:
-                    posts:List[Post] = profile.get_posts(session.count)
+                    posts:List[Post] = profile.get_posts(2)
                     for post in posts:
                         try:
                             post.like()
                             session.add_liked(post)
-                            if comments < 1:
+                            if session.comment_bool and comments < 1:
                                 post.add_comment(setting.comment)
                                 session.add_commented(post)
                                 comments += 1
@@ -164,10 +166,10 @@ def enqueue_interaction(session:FollowSession) -> Tuple[bool, Optional[FollowSes
             except Exception as error:
                 applogger.error(f'Error in interacting: ', exc_info=error)
                 client.disconnect()
-                update_message(session, operation_error_text.format(len(session.get_followed())))
+                update_message(session, operation_error_text.format(followed))
                 return (False, session)
         
-    update_message(session, follow_successful_text.format(len(session.get_followed()), session.count))
+    update_message(session, follow_successful_text.format(followed, session.count))
     client.disconnect()
     return (True, session)
 

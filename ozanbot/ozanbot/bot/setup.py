@@ -34,6 +34,7 @@ def setup(updater):
         states={
             FollowStates.ACCOUNT: [MessageHandler(Filters.text, input_follow_account, run_async=True)],
             FollowStates.COUNT: [CallbackQueryHandler(input_follow_count, run_async=True)],
+            FollowStates.INPUT_COMMENT_BOOL: [CallbackQueryHandler(input_comment_bool, run_async=True)],
             FollowStates.CONFIRM : [CallbackQueryHandler(confirm_follow, pattern=Callbacks.CONFIRM, run_async=True)]
         },
         fallbacks=[CallbackQueryHandler(cancel_follow, pattern=Callbacks.CANCEL, run_async=True)]

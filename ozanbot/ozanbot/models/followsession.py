@@ -6,10 +6,11 @@ import time
 
 
 class FollowSession(InstaSession):
-    def __init__(self, user_id:int, target:str=None, message_id:int=None, interaction:Optional[Interaction]=None) -> None:
+    def __init__(self, user_id:int, target:str=None, message_id:int=None, comment_bool:bool=False, interaction:Optional[Interaction]=None) -> None:
         super(InstaSession, self).__init__(method=Persistence.FOLLOW, user_id=user_id, message_id=message_id)
         self.target = target
         self.count = 0
+        self.comment_bool = comment_bool
         self.interaction = interaction
 
     def __repr__(self) -> str:
@@ -47,6 +48,10 @@ class FollowSession(InstaSession):
     @persistence_decorator
     def set_count(self, count):
         self.count = count
+
+    @persistence_decorator
+    def set_comment_bool(self, value):
+        self.comment_bool = value
 
     @persistence_decorator
     def set_scraped(self, scraped):

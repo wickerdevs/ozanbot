@@ -8,8 +8,7 @@ from functools import wraps
 from telegram.utils.helpers import mention_html
 import sys, traceback, json, logging, os, html, pickle
 from ozanbot.config import config
-
-telelogger = logging.getLogger('telegram.bot')
+from ozanbot import applogger, telelogger, instalogger
 
 # GLOBAL VARIABLES - CONVERSATION
 TIMEOUT = -2

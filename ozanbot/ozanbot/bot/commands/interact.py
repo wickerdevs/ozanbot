@@ -1,5 +1,6 @@
 from instaclient.client.instaclient import InstaClient
 from instaclient.errors.common import InvalidUserError, NotLoggedInError, PrivateAccountError
+import ast
 from ozanbot.bot.commands import *
 
 @send_typing_action
@@ -67,6 +68,29 @@ def input_follow_count(update, context):
 
     session.set_count(int(update.callback_query.data))
     
+    # Confirm
+    markup = CreateMarkup({
+        'True': 'Yes',
+        'False': 'No',
+        Callbacks.CANCEL: 'Cancel'
+    }, cols=2).create_markup()
+    send_message(update, context, select_comment_bool_text, markup)
+    return FollowStates.INPUT_COMMENT_BOOL
+
+
+@send_typing_action
+def input_comment_bool(update, context):
+    if not check_auth(update, context):
+        return
+
+    session:FollowSession = FollowSession.deserialize(Persistence.FOLLOW, update)
+    if update.callback_query.data == Callbacks.CANCEL:
+        return cancel_follow(update, context, session)
+
+    value = ast.literal_eval(update.callback_query.data)
+    session.set_comment_bool(value)
+    applogger.debug(f'Should comment: {value}')
+
     # Confirm
     markup = CreateMarkup({
         Callbacks.CONFIRM: 'Confirm',

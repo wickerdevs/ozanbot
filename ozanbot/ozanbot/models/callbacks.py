@@ -41,7 +41,8 @@ class FollowStates:
     """Object to store PTB Follow Conversation Handler states indicators"""
     ACCOUNT = 1
     COUNT = 2
-    CONFIRM = 3
+    INPUT_COMMENT_BOOL = 3
+    CONFIRM = 4
 
 
 class UnfollowStates:
