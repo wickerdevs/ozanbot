@@ -14,6 +14,7 @@ from ozanbot import CONFIG_DIR, CONFIG_FOLDER
 from instaclient.client.instaclient import InstaClient
 from instaclient.errors.common import FollowRequestSentError, InvaildPasswordError, InvalidUserError, PrivateAccountError, SuspisciousLoginAttemptError, VerificationCodeNecessary
 from instaclient.instagram.post import Post
+from instaclient.instagram.profile import Profile
 from ozanbot.models.instasession import InstaSession
 from ozanbot import applogger
 import os, multiprocessing
@@ -123,9 +124,13 @@ def enqueue_interaction(session:FollowSession) -> Tuple[bool, Optional[FollowSes
     for index, follower in enumerate(followers):
         # TODO: Follow User
         update_message(session, followed_user_text.format(index, len(followers)))
+        profile:Profile = client.get_profile(follower)
+        if not profile:
+            continue
+
         try:
-            client.follow(follower)
-            session.add_followed(client.get_profile(follower))
+            profile.follow()
+            session.add_followed(profile)
         except FollowRequestSentError as error:
             pass
         except Exception as error:
@@ -135,28 +140,29 @@ def enqueue_interaction(session:FollowSession) -> Tuple[bool, Optional[FollowSes
             return (False, session)
 
         # TODO: Get first 2 posts
-        comments = 0
-        try:
+        if profile.post_count > 0:
+            comments = 0
             try:
-                posts:List[Post] = client.get_user_posts(follower, 2)
-                for post in posts:
-                    try:
-                        post.like()
-                        session.add_liked(post)
-                        if comments < 1:
-                            post.add_comment(setting.comment)
-                            session.add_commented(post)
-                            comments += 1
-                    except Exception as error:
-                        applogger.error(f'Error in sending like/comment to <{follower}>: ', exc_info=error)
-                        pass
-            except (PrivateAccountError, InvalidUserError):
-                pass
-        except Exception as error:
-            applogger.error(f'Error in interacting: ', exc_info=error)
-            client.disconnect()
-            update_message(session, operation_error_text.format(len(session.get_followed())))
-            return (False, session)
+                try:
+                    posts:List[Post] = profile.get_posts()
+                    for post in posts:
+                        try:
+                            post.like()
+                            session.add_liked(post)
+                            if comments < 1:
+                                post.add_comment(setting.comment)
+                                session.add_commented(post)
+                                comments += 1
+                        except Exception as error:
+                            applogger.error(f'Error in sending like/comment to <{follower}>: ', exc_info=error)
+                            pass
+                except (PrivateAccountError, InvalidUserError):
+                    pass
+            except Exception as error:
+                applogger.error(f'Error in interacting: ', exc_info=error)
+                client.disconnect()
+                update_message(session, operation_error_text.format(len(session.get_followed())))
+                return (False, session)
         
     update_message(session, follow_successful_text.format(len(session.get_followed())))
     client.disconnect()
