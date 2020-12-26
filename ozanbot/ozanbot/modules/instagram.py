@@ -167,7 +167,7 @@ def enqueue_interaction(session:FollowSession) -> Tuple[bool, Optional[FollowSes
                 update_message(session, operation_error_text.format(len(session.get_followed())))
                 return (False, session)
         
-    update_message(session, follow_successful_text.format(len(session.get_followed())))
+    update_message(session, follow_successful_text.format(len(session.get_followed()), session.count))
     client.disconnect()
     return (True, session)
 

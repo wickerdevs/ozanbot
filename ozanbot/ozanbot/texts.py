@@ -9,7 +9,7 @@ invalid_credentials_text = 'Your instagram credentials are incorrect... Please l
 verification_code_necessary = 'Your instagram account has 2FA turned on... In order for the bot to work, please turn it off.'
 private_account_error_text = 'The account {} is private - hence it\'s impossible to get it\'s followers. Please try again with another account using /follow'
 operation_error_text = 'There was an error when executing your request... The developer has been informed. The bot has interacted with {} users.'
-follow_successful_text = 'Operation successful! The bot has interacteed with {} of {}\'s!'
+follow_successful_text = 'Operation successful! The bot has interacted with {} of {}\'s!'
 
 
 # START COMMAND
