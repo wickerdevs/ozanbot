@@ -1,6 +1,6 @@
-PERSISTENCE_DIR = 'ozanbot/config'
+PERSISTENCE_DIR = 'ozanbot/config/'
 CONFIG_DIR = 'ozanbot/config/config.json'
-CONFIG_FOLDER = 'ozanbot/config'
+CONFIG_FOLDER = 'ozanbot/config/'
 
 import os, logging
 
