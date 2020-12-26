@@ -123,6 +123,9 @@ def enqueue_interaction(session:FollowSession) -> Tuple[bool, Optional[FollowSes
     # FOR EACH USER
     for index, follower in enumerate(followers):
         # TODO: Follow User
+        if follower == session.username:
+            continue
+
         update_message(session, followed_user_text.format(index, len(followers)))
         profile:Profile = client.get_profile(follower)
         if not profile:
@@ -144,7 +147,7 @@ def enqueue_interaction(session:FollowSession) -> Tuple[bool, Optional[FollowSes
             comments = 0
             try:
                 try:
-                    posts:List[Post] = profile.get_posts()
+                    posts:List[Post] = profile.get_posts(session.count)
                     for post in posts:
                         try:
                             post.like()
